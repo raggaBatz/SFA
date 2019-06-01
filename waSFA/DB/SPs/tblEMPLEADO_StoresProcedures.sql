@@ -1,0 +1,165 @@
+USE PROYECTO_FINAL_BD
+GO
+CREATE PROCEDURE [dbo].[spi_EMPLEADO]
+    @PRIMERNOMBRE AS varchar(100),
+    @SEGUNDONOMBRE AS varchar(100),
+    @TERCERNOMBRE AS varchar(100),
+    @PRIMEROAPELLIDO AS varchar(100),
+    @SEGUNDOAPELLIDO AS varchar(100),
+    @APELLIDOCASADA AS varchar(100),
+    @GENERO AS char(1),
+    @DIRECCION AS varchar(200),
+    @DEPARTAMENTO AS varchar(50),
+    @MUNICIPIO AS varchar(50),
+    @ESTADO AS char(1),
+    @FECHACREACION AS datetime,
+    @FECHAMODIFICACION AS datetime
+
+AS BEGIN
+    DECLARE @FilasInsertadas TABLE (Id int)
+    INSERT INTO [EMPLEADO]
+    (
+        [PRIMER_NOMBRE],
+        [SEGUNDO_NOMBRE],
+        [TERCER_NOMBRE],
+        [PRIMERO_APELLIDO],
+        [SEGUNDO_APELLIDO],
+        [APELLIDO_CASADA],
+        [GENERO],
+        [DIRECCION],
+        [DEPARTAMENTO],
+        [MUNICIPIO],
+        [ESTADO],
+        [FECHA_CREACION],
+        [FECHA_MODIFICACION]
+    )
+    OUTPUT	INSERTED.ID_EMPLEADO
+    INTO	@FilasInsertadas
+    VALUES
+    (
+        @PRIMERNOMBRE,
+        @SEGUNDONOMBRE,
+        @TERCERNOMBRE,
+        @PRIMEROAPELLIDO,
+        @SEGUNDOAPELLIDO,
+        @APELLIDOCASADA,
+        @GENERO,
+        @DIRECCION,
+        @DEPARTAMENTO,
+        @MUNICIPIO,
+        @ESTADO,
+        @FECHACREACION,
+        @FECHAMODIFICACION
+    )
+    SELECT TOP 1
+        Id
+    FROM
+        @FilasInsertadas
+
+
+END
+GO
+CREATE PROCEDURE [dbo].[spu_EMPLEADO]
+    @IDEMPLEADO AS int,
+    @PRIMERNOMBRE AS varchar(100),
+    @SEGUNDONOMBRE AS varchar(100),
+    @TERCERNOMBRE AS varchar(100),
+    @PRIMEROAPELLIDO AS varchar(100),
+    @SEGUNDOAPELLIDO AS varchar(100),
+    @APELLIDOCASADA AS varchar(100),
+    @GENERO AS char(1),
+    @DIRECCION AS varchar(200),
+    @DEPARTAMENTO AS varchar(50),
+    @MUNICIPIO AS varchar(50),
+    @ESTADO AS char(1),
+    @FECHACREACION AS datetime,
+    @FECHAMODIFICACION AS datetime
+AS BEGIN
+
+   UPDATE
+        [EMPLEADO]   SET
+
+        [PRIMER_NOMBRE] = @PRIMERNOMBRE,
+        [SEGUNDO_NOMBRE] = @SEGUNDONOMBRE,
+        [TERCER_NOMBRE] = @TERCERNOMBRE,
+        [PRIMERO_APELLIDO] = @PRIMEROAPELLIDO,
+        [SEGUNDO_APELLIDO] = @SEGUNDOAPELLIDO,
+        [APELLIDO_CASADA] = @APELLIDOCASADA,
+        [GENERO] = @GENERO,
+        [DIRECCION] = @DIRECCION,
+        [DEPARTAMENTO] = @DEPARTAMENTO,
+        [MUNICIPIO] = @MUNICIPIO,
+        [ESTADO] = @ESTADO,
+        [FECHA_CREACION] = @FECHACREACION,
+        [FECHA_MODIFICACION] = @FECHAMODIFICACION
+   WHERE
+        [ID_EMPLEADO] = @IDEMPLEADO 
+
+END
+GO
+CREATE PROCEDURE [dbo].[spd_EMPLEADO]
+    @IDEMPLEADO AS int
+AS BEGIN
+
+    DELETE FROM
+        [EMPLEADO]
+    WHERE
+        [ID_EMPLEADO] = @IDEMPLEADO 
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[spc_EMPLEADO]
+    @IDEMPLEADO AS int = NULL,
+    @PRIMERNOMBRE AS varchar(100) = NULL,
+    @SEGUNDONOMBRE AS varchar(100) = NULL,
+    @TERCERNOMBRE AS varchar(100) = NULL,
+    @PRIMEROAPELLIDO AS varchar(100) = NULL,
+    @SEGUNDOAPELLIDO AS varchar(100) = NULL,
+    @APELLIDOCASADA AS varchar(100) = NULL,
+    @GENERO AS char(1) = NULL,
+    @DIRECCION AS varchar(200) = NULL,
+    @DEPARTAMENTO AS varchar(50) = NULL,
+    @MUNICIPIO AS varchar(50) = NULL,
+    @ESTADO AS char(1) = NULL,
+    @FECHACREACION AS datetime = NULL,
+    @FECHAMODIFICACION AS datetime = NULL
+AS BEGIN
+
+    SELECT
+        [ID_EMPLEADO] ,
+        [PRIMER_NOMBRE] ,
+        [SEGUNDO_NOMBRE] ,
+        [TERCER_NOMBRE] ,
+        [PRIMERO_APELLIDO] ,
+        [SEGUNDO_APELLIDO] ,
+        [APELLIDO_CASADA] ,
+        [GENERO] ,
+        [DIRECCION] ,
+        [DEPARTAMENTO] ,
+        [MUNICIPIO] ,
+        [ESTADO] ,
+        [FECHA_CREACION] ,
+        [FECHA_MODIFICACION] 
+    FROM
+        [EMPLEADO]
+    WHERE
+isnull(@IDEMPLEADO,isnull(ID_EMPLEADO,0)) = isnull(ID_EMPLEADO,0) AND
+isnull(@PRIMERNOMBRE,isnull(PRIMER_NOMBRE,'')) = isnull(PRIMER_NOMBRE,'') AND
+isnull(@SEGUNDONOMBRE,isnull(SEGUNDO_NOMBRE,'')) = isnull(SEGUNDO_NOMBRE,'') AND
+isnull(@TERCERNOMBRE,isnull(TERCER_NOMBRE,'')) = isnull(TERCER_NOMBRE,'') AND
+isnull(@PRIMEROAPELLIDO,isnull(PRIMERO_APELLIDO,'')) = isnull(PRIMERO_APELLIDO,'') AND
+isnull(@SEGUNDOAPELLIDO,isnull(SEGUNDO_APELLIDO,'')) = isnull(SEGUNDO_APELLIDO,'') AND
+isnull(@APELLIDOCASADA,isnull(APELLIDO_CASADA,'')) = isnull(APELLIDO_CASADA,'') AND
+isnull(@GENERO,isnull(GENERO,'')) = isnull(GENERO,'') AND
+isnull(@DIRECCION,isnull(DIRECCION,'')) = isnull(DIRECCION,'') AND
+isnull(@DEPARTAMENTO,isnull(DEPARTAMENTO,'')) = isnull(DEPARTAMENTO,'') AND
+isnull(@MUNICIPIO,isnull(MUNICIPIO,'')) = isnull(MUNICIPIO,'') AND
+isnull(@ESTADO,isnull(ESTADO,'')) = isnull(ESTADO,'') AND
+isnull(@FECHACREACION,isnull(FECHA_CREACION,getdate())) = isnull(FECHA_CREACION,getdate()) AND
+isnull(@FECHAMODIFICACION,isnull(FECHA_MODIFICACION,getdate())) = isnull(FECHA_MODIFICACION,getdate()) 
+
+END
+GO
+
+

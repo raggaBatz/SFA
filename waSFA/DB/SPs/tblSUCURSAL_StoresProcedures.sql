@@ -1,0 +1,140 @@
+USE PROYECTO_FINAL_BD
+GO
+CREATE PROCEDURE [dbo].[spi_SUCURSAL]
+    @NOMBRESUCURSAL AS varchar(100),
+    @DIRECCIONSUCURSAL AS varchar(100),
+    @DEPARTAMENTO AS varchar(50),
+    @MUNICIPIO AS varchar(50),
+    @ESTADO AS char(1),
+    @FECHACREACION AS datetime,
+    @FECHAMODIFICACION AS datetime
+
+AS BEGIN
+
+    DECLARE @FilasInsertadas TABLE (Id int)
+
+    INSERT INTO [SUCURSAL]
+    (
+        [NOMBRE_SUCURSAL],
+        [DIRECCION_SUCURSAL],
+        [DEPARTAMENTO],
+        [MUNICIPIO],
+        [ESTADO],
+        [FECHA_CREACION],
+        [FECHA_MODIFICACION]
+    )
+    OUTPUT	INSERTED.ID_SUCURSAL
+    INTO	@FilasInsertadas
+    VALUES
+    (
+        @NOMBRESUCURSAL,
+        @DIRECCIONSUCURSAL,
+        @DEPARTAMENTO,
+        @MUNICIPIO,
+        @ESTADO,
+        @FECHACREACION,
+        @FECHAMODIFICACION
+    )
+    SELECT TOP 1
+        Id
+    FROM
+        @FilasInsertadas
+
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[spu_SUCURSAL]
+    @IDSUCURSAL AS int,
+    @NOMBRESUCURSAL AS varchar(100),
+    @DIRECCIONSUCURSAL AS varchar(100),
+    @DEPARTAMENTO AS varchar(50),
+    @MUNICIPIO AS varchar(50),
+    @ESTADO AS char(1),
+    @FECHACREACION AS datetime,
+    @FECHAMODIFICACION AS datetime
+AS BEGIN
+
+   UPDATE
+        [SUCURSAL]   SET
+
+        [NOMBRE_SUCURSAL] = @NOMBRESUCURSAL,
+        [DIRECCION_SUCURSAL] = @DIRECCIONSUCURSAL,
+        [DEPARTAMENTO] = @DEPARTAMENTO,
+        [MUNICIPIO] = @MUNICIPIO,
+        [ESTADO] = @ESTADO,
+        [FECHA_CREACION] = @FECHACREACION,
+        [FECHA_MODIFICACION] = @FECHAMODIFICACION
+   WHERE
+        [ID_SUCURSAL] = @IDSUCURSAL 
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[spd_SUCURSAL]
+    @IDSUCURSAL AS int
+AS BEGIN
+
+    DELETE FROM
+        [SUCURSAL]
+    WHERE
+        [ID_SUCURSAL] = @IDSUCURSAL 
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[spc_SUCURSAL]
+    @IDSUCURSAL AS int = NULL,
+    @NOMBRESUCURSAL AS varchar(100) = NULL,
+    @DIRECCIONSUCURSAL AS varchar(100) = NULL,
+    @DEPARTAMENTO AS varchar(50) = NULL,
+    @MUNICIPIO AS varchar(50) = NULL,
+    @ESTADO AS char(1) = NULL,
+    @FECHACREACION AS datetime = NULL,
+    @FECHAMODIFICACION AS datetime = NULL
+AS BEGIN
+
+    SELECT
+        [ID_SUCURSAL] ,
+        [NOMBRE_SUCURSAL] ,
+        [DIRECCION_SUCURSAL] ,
+        [DEPARTAMENTO] ,
+        [MUNICIPIO] ,
+        [ESTADO] ,
+        [FECHA_CREACION] ,
+        [FECHA_MODIFICACION] 
+    FROM
+        [SUCURSAL]
+    WHERE
+isnull(@IDSUCURSAL,isnull(ID_SUCURSAL,0)) = isnull(ID_SUCURSAL,0) AND
+isnull(@NOMBRESUCURSAL,isnull(NOMBRE_SUCURSAL,'')) = isnull(NOMBRE_SUCURSAL,'') AND
+isnull(@DIRECCIONSUCURSAL,isnull(DIRECCION_SUCURSAL,'')) = isnull(DIRECCION_SUCURSAL,'') AND
+isnull(@DEPARTAMENTO,isnull(DEPARTAMENTO,'')) = isnull(DEPARTAMENTO,'') AND
+isnull(@MUNICIPIO,isnull(MUNICIPIO,'')) = isnull(MUNICIPIO,'') AND
+isnull(@ESTADO,isnull(ESTADO,'')) = isnull(ESTADO,'') AND
+isnull(@FECHACREACION,isnull(FECHA_CREACION,getdate())) = isnull(FECHA_CREACION,getdate()) AND
+isnull(@FECHAMODIFICACION,isnull(FECHA_MODIFICACION,getdate())) = isnull(FECHA_MODIFICACION,getdate()) 
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[spg_SUCURSAL]
+AS BEGIN
+
+    SELECT
+        [ID_SUCURSAL] ,
+        [NOMBRE_SUCURSAL] ,
+        [DIRECCION_SUCURSAL] ,
+        [DEPARTAMENTO] ,
+        [MUNICIPIO] ,
+        [ESTADO] ,
+        [FECHA_CREACION] ,
+        [FECHA_MODIFICACION] 
+    FROM
+        [SUCURSAL]
+	WHERE
+		[ESTADO] = 1
+END
+GO
+
+
